@@ -51,9 +51,61 @@ function App() {
   );
 }
 
+import { useState } from "react";
+import axios from "axios";
+
+function App() {
+  const [text, setText] = useState("");
+  const [sentiment, setSentiment] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    setSentiment(null);
+
+    try {
+      const response = await axios.post(
+        "https://module3-assignment-part2-api.onrender.com",
+        { text: text }
+      );
+
+      setSentiment(response.data.sentiment);
+    } catch (err) {
+      console.error("Error:", err);
+      setError("Kunde inte analysera sentimentet. Försök igen!");
+    }
+
+    setLoading(false);
+  };
+
+  return (
+    <div style={styles.container}>
+      <h1 style={styles.title}>Sentimentanalys</h1>
+      <form onSubmit={handleSubmit} style={styles.form}>
+        <textarea
+          style={styles.textarea}
+          placeholder="Skriv in text..."
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+        />
+        <button style={styles.button} type="submit" disabled={loading || !text}>
+          {loading ? "Analyserar..." : "Analysera"}
+        </button>
+      </form>
+
+      {sentiment && <h2 style={styles.result}>Sentiment: {sentiment}</h2>}
+      {error && <p style={styles.error}>{error}</p>}
+    </div>
+  );
+}
+
 const styles = {
   container: {
     display: "flex",
+    flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
     height: "100vh",
@@ -105,7 +157,6 @@ const styles = {
   "@media (max-width: 600px)": {
     container: {
       width: "90%",
-      margin: "30px auto",
       padding: "15px",
     },
     title: {
