@@ -14,22 +14,19 @@ function App() {
     setSentiment(null);
 
     try {
-      const response = await axios.post("https://module3-assignment-part2-api.onrender.com", {
-        text: text,
-      });
+        const response = await axios.post("https://module3-assignment-part2-api.onrender.com/predict", {
+            text: text,
+        }, { headers: { "Content-Type": "application/json" } });
 
-      setSentiment(response.data.sentiment);
+        console.log("API Response:", response.data); // Logga API-svaret
+        setSentiment(response.data.sentiment);
     } catch (err) {
-      console.error("Error response:", err.response ? err.response.data : err);
-      setError(
-        err.response?.data?.message || "Kunde inte analysera sentimentet. Försök igen!"
-      );
+        console.error("Error:", err.response ? err.response.data : err.message);
+        setError("Kunde inte analysera sentimentet. Försök igen!");
     }
-    
-  
 
     setLoading(false);
-  };
+};
 
   return (
     <div style={styles.container}>
