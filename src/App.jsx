@@ -1,25 +1,27 @@
 import { useState } from "react";
-import axios from "axios";
+import axios from "axios"; // HTTP requests
 
 function App() {
-  const [text, setText] = useState("");
-  const [sentiment, setSentiment] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [text, setText] = useState(""); // save text that user writes
+  const [sentiment, setSentiment] = useState(null); // save result from sentimental analysis
+  const [loading, setLoading] = useState(false); // is API request loading
+  const [error, setError] = useState(""); // error message
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
-    setSentiment(null);
 
+  const handleSubmit = async (e) => { 
+    e.preventDefault(); // prevents the page from reloading when submitting the form
+    setLoading(true); // API call loading
+    setError(""); // clear previous errors 
+    setSentiment(null); // clear previous sentiment result
+
+    // send text to API
     try {
-      const response = await axios.post(
+      const response = await axios.post( // HTTP POST request to API with text
         "https://module3-assignment-part2-api.onrender.com",
         { text: text }
       );
 
-      setSentiment(response.data.sentiment);
+      setSentiment(response.data.sentiment); // save API response to sentiment state
     } catch (err) {
       console.error("Error:", err);
       setError("Kunde inte analysera sentimentet. Försök igen!");
@@ -30,16 +32,16 @@ function App() {
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.title}>Sentimentanalys</h1>
+      <h1 style={styles.title}>Sentimental analysis</h1>
       <form onSubmit={handleSubmit} style={styles.form}>
         <textarea
           style={styles.textarea}
-          placeholder="Skriv in text..."
+          placeholder="Write text..."
           value={text}
-          onChange={(e) => setText(e.target.value)}
+          onChange={(e) => setText(e.target.value)} // update text state
         />
         <button style={styles.button} type="submit" disabled={loading || !text}>
-          {loading ? "Analyserar..." : "Analysera"}
+          {loading ? "Analyzes..." : "Analyze"}
         </button>
       </form>
 
@@ -51,9 +53,13 @@ function App() {
 
 const styles = {
   container: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100vh",
     maxWidth: "90%",
     width: "500px",
-    margin: "50px auto",
+    margin: "0 auto",
     textAlign: "center",
     fontFamily: "Arial, sans-serif",
     padding: "20px",
