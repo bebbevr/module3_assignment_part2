@@ -1,6 +1,5 @@
-import  { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
-import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   const [text, setText] = useState("");
@@ -15,13 +14,14 @@ function App() {
     setSentiment(null);
 
     try {
-      const response = await axios.post("https://module3-assignment-part2-api.onrender.com/predict", {
-        text: text,
-      });
+      const response = await axios.post(
+        "https://module3-assignment-part2-api.onrender.com",
+        { text: text }
+      );
 
       setSentiment(response.data.sentiment);
     } catch (err) {
-      console.error("Error:", err.response ? err.response.data : err.message);
+      console.error("Error:", err);
       setError("Kunde inte analysera sentimentet. Försök igen!");
     }
 
@@ -29,28 +29,93 @@ function App() {
   };
 
   return (
-    <div className="container d-flex flex-column align-items-center justify-content-center min-vh-100">
-      <h1 className="text-center mb-4">Sentimentanalys</h1>
-      <form className="w-100 p-4 bg-light rounded shadow-lg" onSubmit={handleSubmit}>
+    <div style={styles.container}>
+      <h1 style={styles.title}>Sentimentanalys</h1>
+      <form onSubmit={handleSubmit} style={styles.form}>
         <textarea
-          className="form-control mb-3"
+          style={styles.textarea}
           placeholder="Skriv in text..."
           value={text}
           onChange={(e) => setText(e.target.value)}
         />
-        <button className="btn btn-primary w-100" type="submit" disabled={loading || !text}>
+        <button style={styles.button} type="submit" disabled={loading || !text}>
           {loading ? "Analyserar..." : "Analysera"}
         </button>
       </form>
 
-      {sentiment && (
-        <h2 className={`mt-3 text-${sentiment === "positive" ? "success" : sentiment === "negative" ? "danger" : "secondary"}`}>
-          Sentiment: {sentiment}
-        </h2>
-      )}
-      {error && <p className="text-danger mt-2">{error}</p>}
+      {sentiment && <h2 style={styles.result}>Sentiment: {sentiment}</h2>}
+      {error && <p style={styles.error}>{error}</p>}
     </div>
   );
 }
+
+const styles = {
+  container: {
+    maxWidth: "90%",
+    width: "500px",
+    margin: "50px auto",
+    textAlign: "center",
+    fontFamily: "Arial, sans-serif",
+    padding: "20px",
+    boxSizing: "border-box",
+  },
+  title: {
+    fontSize: "24px",
+    marginBottom: "20px",
+  },
+  form: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "10px",
+  },
+  textarea: {
+    width: "100%",
+    height: "120px",
+    padding: "12px",
+    fontSize: "16px",
+    borderRadius: "5px",
+    border: "1px solid #ccc",
+    resize: "none",
+  },
+  button: {
+    padding: "12px",
+    fontSize: "16px",
+    backgroundColor: "#007BFF",
+    color: "#fff",
+    border: "none",
+    cursor: "pointer",
+    borderRadius: "5px",
+    transition: "background 0.3s",
+  },
+  result: {
+    marginTop: "20px",
+    fontSize: "20px",
+    color: "#28a745",
+  },
+  error: {
+    color: "red",
+    marginTop: "10px",
+  },
+  "@media (max-width: 600px)": {
+    container: {
+      width: "90%",
+      margin: "30px auto",
+      padding: "15px",
+    },
+    title: {
+      fontSize: "20px",
+    },
+    textarea: {
+      height: "100px",
+    },
+    button: {
+      fontSize: "14px",
+      padding: "10px",
+    },
+    result: {
+      fontSize: "18px",
+    },
+  },
+};
 
 export default App;
