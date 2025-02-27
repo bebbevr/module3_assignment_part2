@@ -20,9 +20,12 @@ function App() {
 
       setSentiment(response.data.sentiment);
     } catch (err) {
-      console.error("Error:", err); // Logga felet i konsolen
-      setError("Kunde inte analysera sentimentet. Försök igen!");
-  }
+      console.error("Error response:", err.response ? err.response.data : err);
+      setError(
+        err.response?.data?.message || "Kunde inte analysera sentimentet. Försök igen!"
+      );
+    }
+    
   
 
     setLoading(false);
