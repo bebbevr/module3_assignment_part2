@@ -15,8 +15,8 @@ function App() {
 
     // axios.post --> send HTTP post request to the API
     try {
-        // const response = await axios.post("https://module3-assignment-part2-api.onrender.com/predict", {
-        const response = await axios.post("https://cc-2025-backend-open-cloud-computing-2025.2.rahtiapp.fi/predict", {
+        const response = await axios.post("https://module3-assignment-part2-api.onrender.com/predict", {
+        //const response = await axios.post("https://cc-2025-backend-open-cloud-computing-2025.2.rahtiapp.fi/predict", {
             text: text,
         }, { headers: { "Content-Type": "application/json" } });
 
