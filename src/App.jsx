@@ -37,7 +37,7 @@ function App() {
         <form onSubmit={handleSubmit} style={styles.form}>
           <textarea
             style={styles.textarea}
-            placeholder="Write text..."
+            placeholder="Write text HERE..."
             value={text}
             onChange={(e) => setText(e.target.value)}
           />
